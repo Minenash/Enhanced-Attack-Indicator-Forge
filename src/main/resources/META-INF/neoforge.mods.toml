@@ -1,0 +1,24 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "${loader_version_range}" #mandatory
+license = "${mod_license}"
+issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+
+[[mods]] #mandatory
+modId = "${mod_id}" #mandatory
+version = "${mod_version}" #mandatory
+displayName = "${mod_name}" #mandatory
+displayURL = "https://github.com/Minenash/Enhanced-Attack-Indicator/tree/1.21" #optional
+logoFile="enhanced_attack_indicator.png" #optional
+authors = "${mod_authors}" #optional
+#displayTest="IGNORE_ALL_VERSION"
+description = '''${mod_description}'''#mandatory
+
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
+[[dependencies."${mod_id}"]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "CLIENT"

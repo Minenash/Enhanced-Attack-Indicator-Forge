@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "minenash.enhanced_attack_indicator.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "enhanced_attack_indicator.refmap.json",
+  "client": [
+    "GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
