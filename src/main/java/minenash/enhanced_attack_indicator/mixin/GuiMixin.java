@@ -1,7 +1,5 @@
 package minenash.enhanced_attack_indicator.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import minenash.enhanced_attack_indicator.EnhancedAttackIndicator;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
@@ -41,13 +39,9 @@ public class GuiMixin {
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void showPlus(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (renderFullness) {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             int j = guiGraphics.guiHeight() / 2 - 7 + 16;
             int k = guiGraphics.guiWidth() / 2 - 8;
-            guiGraphics.blitSprite(RenderType::guiTextured, CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.disableBlend();
+            guiGraphics.blitSprite(RenderType::crosshair, CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
             renderFullness = false;
         }
     }
