@@ -7,6 +7,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,7 +45,7 @@ public class GuiMixin {
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             int j = guiGraphics.guiHeight() / 2 - 7 + 16;
             int k = guiGraphics.guiWidth() / 2 - 8;
-            guiGraphics.blitSprite(CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
+            guiGraphics.blitSprite(RenderType::guiTextured, CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
             renderFullness = false;

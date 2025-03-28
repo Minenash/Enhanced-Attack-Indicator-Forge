@@ -103,11 +103,11 @@ public class EnhancedAttackIndicator {
             return weaponCooldown(mainHand.getItem(), weaponProgress);
 
         if (Config.showItemCooldowns) {
-            float cooldown = player.getCooldowns().getCooldownPercent(offHand.getItem(), 0);
+            float cooldown = player.getCooldowns().getCooldownPercent(offHand, 0);
             if (cooldown != 0.0F)
                 return cooldown;
 
-            cooldown = player.getCooldowns().getCooldownPercent(mainHand.getItem(), 0);
+            cooldown = player.getCooldowns().getCooldownPercent(mainHand, 0);
             if (cooldown != 0.0F)
                 return cooldown;
         }
