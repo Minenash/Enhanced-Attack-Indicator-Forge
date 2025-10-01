@@ -1,0 +1,16 @@
+{
+
+  "enhanced_attack_indicator.configuration.title": "Enhanced Attack Indicator",
+  "enhanced_attack_indicator.configuration.showBlockBreaking": "Mostrar el progreso de ruptura de bloque",
+  "enhanced_attack_indicator.configuration.showRangeWeaponDraw": "Mostrar el progreso al disparar armas a distancia",
+  "enhanced_attack_indicator.configuration.showItemCooldowns": "Mostrar el progreso del tiempo de reutilización de objetos",
+  "enhanced_attack_indicator.configuration.showFoodAndPotions": "Mostrar el progreso del tiempo de reutilización de la comida y pociones",
+  "enhanced_attack_indicator.configuration.disablePickaxesAndShovels": "Desactivar el tiempo de reutilización del pico y la pala",
+  "enhanced_attack_indicator.configuration.disableAxes": "Desactivar el tiempo de reutilización del hacha",
+  "enhanced_attack_indicator.configuration.weaponCoolDownImportance": "Prioridad del tiempo de reutilización de armas",
+  "enhanced_attack_indicator.configuration.showSleep": "Mostrar el progreso al dormir",
+  "enhanced_attack_indicator.configuration.showItemContainerFullness": "Mostrar el progreso al llenar contenedores",
+  "enhanced_attack_indicator.configuration.enum.WeaponCoolDownImportance.FIRST": "Primera",
+  "enhanced_attack_indicator.configuration.enum.WeaponCoolDownImportance.MIDDLE": "Media",
+  "enhanced_attack_indicator.configuration.enum.WeaponCoolDownImportance.LAST": "Última"
+}

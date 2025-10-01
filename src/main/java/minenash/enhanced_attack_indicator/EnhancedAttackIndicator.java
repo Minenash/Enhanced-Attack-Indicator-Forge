@@ -1,9 +1,9 @@
 package minenash.enhanced_attack_indicator;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -11,15 +11,12 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import org.slf4j.Logger;
 
 import java.util.List;
 
 @Mod(EnhancedAttackIndicator.MODID)
 public class EnhancedAttackIndicator {
     public static final String MODID = "enhanced_attack_indicator";
-    private static final Logger LOGGER = LogUtils.getLogger();
-
 
     public EnhancedAttackIndicator(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
@@ -32,24 +29,25 @@ public class EnhancedAttackIndicator {
         LocalPlayer player = Minecraft.getInstance().player;
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
+        boolean weaponShouldShow = weaponProgress < 1 || Minecraft.getInstance().crosshairPickEntity instanceof LivingEntity le && le.isAlive() && player.getCurrentItemAttackStrengthDelay() > 5;
 
-        if (Config.weaponCoolDownImportance == Config.WeaponCoolDownImportance.FIRST && weaponProgress < 1.0F)
+        if (Config.WEAPON_COOL_DOWN_IMPORTANCE.get() == Config.WeaponCoolDownImportance.FIRST && weaponShouldShow)
             return weaponCooldown(mainHand.getItem(), weaponProgress);
 
-        if (Config.showSleep) {
+        if (Config.SHOW_SLEEP.get()) {
             int sleep = player.getSleepTimer();
             if (sleep > 0 && sleep <= 100)
                 return sleep == 100 ? 2.0F : sleep / 100.0F;
         }
 
-        if (Config.showBlockBreaking) {
+        if (Config.SHOW_BLOCK_BREAKING.get()) {
             float breakingProgress = Minecraft.getInstance().gameMode.getDestroyStage();
 
             if (breakingProgress > 0)
                 return breakingProgress / 10;
         }
 
-        if (Config.showRangeWeaponDraw) {
+        if (Config.SHOW_RANGE_WEAPON_DRAW.get()) {
             ItemStack stack = player.getUseItem();
             Item item = stack.getItem();
 
@@ -67,7 +65,7 @@ public class EnhancedAttackIndicator {
             }
         }
 
-        if (Config.showFoodAndPotions) {
+        if (Config.SHOW_FOOD_AND_POTIONS.get()) {
             ItemStack stack = player.getUseItem();
             Item item = stack.getItem();
             if (item.components().has(DataComponents.FOOD) || item == Items.POTION) {
@@ -76,7 +74,7 @@ public class EnhancedAttackIndicator {
             }
         }
 
-        if (Config.showItemContainerFullness) {
+        if (Config.SHOW_ITEM_CONTAINER_FULLNESS.get()) {
             ItemStack stack = player.getMainHandItem();
             var container = stack.get(DataComponents.CONTAINER);
             if (container != null) {
@@ -99,10 +97,10 @@ public class EnhancedAttackIndicator {
             }
         }
 
-        if (Config.weaponCoolDownImportance == Config.WeaponCoolDownImportance.MIDDLE && weaponProgress < 1.0F)
+        if (Config.WEAPON_COOL_DOWN_IMPORTANCE.get() == Config.WeaponCoolDownImportance.MIDDLE && weaponShouldShow)
             return weaponCooldown(mainHand.getItem(), weaponProgress);
 
-        if (Config.showItemCooldowns) {
+        if (Config.SHOW_ITEM_COOLDOWNS.get()) {
             float cooldown = player.getCooldowns().getCooldownPercent(offHand, 0);
             if (cooldown != 0.0F)
                 return cooldown;
@@ -112,11 +110,11 @@ public class EnhancedAttackIndicator {
                 return cooldown;
         }
 
-        if (Config.showRangeWeaponDraw && (mainHand.getItem() == Items.CROSSBOW && CrossbowItem.isCharged(mainHand)
+        if (Config.SHOW_RANGE_WEAPON_DRAW.get() && (mainHand.getItem() == Items.CROSSBOW && CrossbowItem.isCharged(mainHand)
                 || offHand.getItem() == Items.CROSSBOW && CrossbowItem.isCharged(mainHand)))
             return 2.0F;
 
-        if (Config.weaponCoolDownImportance == Config.WeaponCoolDownImportance.LAST)
+        if (Config.WEAPON_COOL_DOWN_IMPORTANCE.get() == Config.WeaponCoolDownImportance.LAST && weaponShouldShow)
             return weaponCooldown(mainHand.getItem(), weaponProgress);
 
         return 1.0F;
@@ -124,11 +122,11 @@ public class EnhancedAttackIndicator {
     }
 
     private static float weaponCooldown(Item item, float weaponProgress) {
-        if (Config.disablePickaxesAndShovels && (item.getDescriptionId().contains("pickaxe") || item.getDescriptionId().contains("shovel")))
+        if (Config.DISABLE_PICKAXES_AND_SHOVELS.get() && (item.getDescriptionId().contains("pickaxe") || item.getDescriptionId().contains("shovel")))
             return 1.0F;
-        if (Config.disableAxes && item.getDescriptionId().contains("axe") && !item.getDescriptionId().contains("pickaxe"))
+        if (Config.DISABLE_AXES.get() && item.getDescriptionId().contains("axe") && !item.getDescriptionId().contains("pickaxe"))
             return 1.0F;
-        return weaponProgress;
+        return weaponProgress == 1 ? 2 : weaponProgress;
 
     }
 

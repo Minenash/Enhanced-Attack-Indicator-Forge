@@ -5,7 +5,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ public class GuiMixin {
     @Unique boolean renderFullness = false;
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F"))
-    private float setBarProgress(LocalPlayer player, float baseTime) {
+    private float enhancedAttackIndicator$setBarProgress(LocalPlayer player, float baseTime) {
         float progress = EnhancedAttackIndicator.getProgress(player.getAttackStrengthScale(baseTime));
 
         if (progress == 2.0F)
@@ -31,23 +31,23 @@ public class GuiMixin {
     }
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isAlive()Z"))
-    private boolean dontShowPlus(Entity _entity) {
+    private boolean enhancedAttackIndicator$dontShowPlus(Entity _entity) {
         return false;
     }
 
-    private static final ResourceLocation CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE = ResourceLocation.parse("hud/crosshair_attack_indicator_full");
+    @Unique private static final ResourceLocation CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE = ResourceLocation.parse("hud/crosshair_attack_indicator_full");
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
-    private void showPlus(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void enhancedAttackIndicator$showPlus(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (renderFullness) {
             int j = guiGraphics.guiHeight() / 2 - 7 + 16;
             int k = guiGraphics.guiWidth() / 2 - 8;
-            guiGraphics.blitSprite(RenderType::crosshair, CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
+            guiGraphics.blitSprite(RenderPipelines.CROSSHAIR, CROSSHAIR_ATTACK_INDICATOR_FULL_TEXTURE, k, j, 16, 16);
             renderFullness = false;
         }
     }
 
     @Redirect(method = "renderItemHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getAttackStrengthScale(F)F"))
-    private float setHotBarProgress(LocalPlayer player, float baseTime) {
+    private float enhancedAttackIndicator$setHotBarProgress(LocalPlayer player, float baseTime) {
         float progress = EnhancedAttackIndicator.getProgress(player.getAttackStrengthScale(baseTime));
         return progress == 2.0F ? 0.99F : progress;
     }
